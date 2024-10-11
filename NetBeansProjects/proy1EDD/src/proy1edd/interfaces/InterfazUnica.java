@@ -48,7 +48,7 @@ public class InterfazUnica extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Savoye LET", 0, 24)); // NOI18N
         jLabel1.setText("Ubicación de Sucursales");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Hiragino Mincho ProN", 0, 13)); // NOI18N
         jLabel2.setText("En este sistema podrás, a partir del archivo cargado por ti, establecer una ");
