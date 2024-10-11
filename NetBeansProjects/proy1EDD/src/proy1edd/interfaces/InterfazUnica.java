@@ -81,15 +81,35 @@ public class InterfazUnica extends javax.swing.JFrame {
         contBoton.setBackground(new java.awt.Color(204, 204, 255));
         contBoton.setFont(new java.awt.Font("Kohinoor Devanagari", 0, 13)); // NOI18N
         contBoton.setText("Continuar");
+        contBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contBotonActionPerformed(evt);
+            }
+        });
         getContentPane().add(contBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 250, -1, -1));
 
         exitBoton.setBackground(new java.awt.Color(204, 204, 255));
         exitBoton.setFont(new java.awt.Font("Kohinoor Devanagari", 0, 13)); // NOI18N
         exitBoton.setText("Salir");
+        exitBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitBotonActionPerformed(evt);
+            }
+        });
         getContentPane().add(exitBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void contBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contBotonActionPerformed
+        this.setVisible(false);
+            InterfazInteractuar interfaz2 = new InterfazInteractuar();
+            interfaz2.show();
+    }//GEN-LAST:event_contBotonActionPerformed
+
+    private void exitBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBotonActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_exitBotonActionPerformed
 
     /**
      * @param args the command line arguments
