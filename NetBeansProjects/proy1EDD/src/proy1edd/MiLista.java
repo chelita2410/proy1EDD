@@ -8,6 +8,11 @@ package proy1edd;
  *
  * @author chela
  */
+
+/**</code> MiLista </code> es la clase creada para la lista de adyacencia
+ * que se ocupará de leer el grafo, las listas de adyacencia son más adecuadas
+ * para trabajar con este tipo de datos
+ */
 public class MiLista {
     private String[] data;
     private int size;
