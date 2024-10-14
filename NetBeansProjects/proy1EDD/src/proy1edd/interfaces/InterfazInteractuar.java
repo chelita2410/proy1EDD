@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import proy1edd.CargarGrafoTransporte;
 import proy1edd.GrafoTransporte;
+import proy1edd.VisualizarGrafoTransporte;
 
 
 /**
@@ -23,6 +24,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     /**
      * Creates new form InterfazInteractuar
      */
+    
     public InterfazInteractuar() {
         setTitle("Cobertura sucursales por red de transporte");
         setSize(600, 400);
@@ -76,6 +78,12 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         });
     }
     
+    private void enseñarGrafoVisualmente() {
+        if(grafo != null) {
+            new VisualizarGrafoTransporte(grafo); //Enseña el grafo usando GraphStream
+        }
+    }
+    
     //Método para cargar la Red de Transporte
     private void cargarRedTransporte() {
         JFileChooser fileChooser = new JFileChooser();
@@ -86,6 +94,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
                 String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                 CargarGrafoTransporte.cargarDesdeJSON(grafo, filePath);
                 enseñarGrafo(); //Enseña el grafo cargado en el Text Area
+                enseñarGrafoVisualmente();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error cargando archivo: " + e.getMessage());
             }
@@ -113,7 +122,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     
     //Método para revisar la covertura
     private void revisarCobertura() {
-        JOptionPane.showMessageDialog(this, "Opción para poner cobertura está bajo construcción");
+        JOptionPane.showMessageDialog(this, "Opción para revisar cobertura está bajo construcción");
     }
     
     /**
