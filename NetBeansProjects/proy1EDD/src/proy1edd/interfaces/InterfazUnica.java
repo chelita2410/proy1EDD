@@ -14,6 +14,8 @@ public class InterfazUnica extends javax.swing.JFrame {
      * Creates new form InterfazUnica
      */
     public InterfazUnica() {
+        setSize(600, 400);
+        this.setLocationRelativeTo(null);
         initComponents();
     }
 

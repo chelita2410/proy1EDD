@@ -11,26 +11,29 @@ import java.io.FileReader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+//Imports para leer el archivo JSON
+import java.io.FileReader;
+import java.io.IOException;
 /**
  *
  * @author chela
  */
 public class CargarGrafoTransporte {
-    public static void cargarDesdeJSON(GrafoTransporte grafo, String filePath) throws Exception {
+    public static void cargarDesdeJSON(GrafoTransporte grafo, String filePath) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         FileReader reader = new FileReader(filePath);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         
         for (Object lineName : jsonObject.keySet()) {
-            org.json.simple.JSONArray jsonParadas = (org.json.simple.JSONArray) jsonObject.get(lineName);
-            MiLista listaParadas = new MiLista();
-            for (Object parada : jsonParadas) {
-                listaParadas.add((String) parada); //Añade cada parada a </code> MiLista </code>
-            }
-            for (int i = 0; i < listaParadas.size() - 1; i++) {
-                String parada1 = listaParadas.get(i);
-                String parada2 = listaParadas.get(i + 1);
-                grafo.añadirArista(parada1, parada2); //Añade aristas entre paradas consecutivas
+            String rawLineData = jsonObject.get(lineName).toString();
+            rawLineData = rawLineData.replace("[", "").replace("]", "").replace("\"", "").replace("{", "").replace("}", ""); //Para eliminar los caracteres [] y "
+            String[] paradas = rawLineData.split(","); //Para separar las paradas por comas
+                    
+
+            for (int i = 0; i < paradas.length - 1; i++) {
+                String parada1 = paradas[i].trim();
+                String parada2 = paradas[i + 1].trim();
+                grafo.añadirArista(parada1, parada2); //Añade una arista al grafo
             }
         }
         reader.close();

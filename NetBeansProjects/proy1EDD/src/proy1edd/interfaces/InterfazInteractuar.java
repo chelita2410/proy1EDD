@@ -18,6 +18,7 @@ import proy1edd.VisualizarGrafoTransporte;
  */
 public class InterfazInteractuar extends javax.swing.JFrame {
     private GrafoTransporte grafo; //Objeto grafo
+    private JComboBox<String> seleccionarParada; //Enseña todas las paradas para seleccionar en cual se pone la sucursal
     
     
 
@@ -28,12 +29,13 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     public InterfazInteractuar() {
         setTitle("Cobertura sucursales por red de transporte");
         setSize(600, 400);
+        this.setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         setLayout(new BorderLayout());
         
         //Crear menú
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("Archivo");
+        JMenu fileMenu = new JMenu("Archivo JSON");
         JMenuItem loadMenuItem= new JMenuItem("Carga el archivo con la red de transporte");
         fileMenu.add(loadMenuItem);
         menuBar.add(fileMenu);
@@ -46,8 +48,10 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         
         //Acciones realizadas por el usuario
         JPanel controlPanel = new JPanel();
+        seleccionarParada = new JComboBox<>();
         JButton nuevaSucursalButton = new JButton("Establecer Nueva Sucursal");
         JButton revisarCoberturaButton = new JButton("Revisar Cobertura");
+        controlPanel.add(seleccionarParada);
         controlPanel.add(nuevaSucursalButton);
         controlPanel.add(revisarCoberturaButton);
         add(controlPanel, BorderLayout.SOUTH);
@@ -93,11 +97,20 @@ public class InterfazInteractuar extends javax.swing.JFrame {
                 grafo = new GrafoTransporte(); //Inicializa el grafo
                 String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                 CargarGrafoTransporte.cargarDesdeJSON(grafo, filePath);
+                actualizarSeleccionarParada();
                 enseñarGrafo(); //Enseña el grafo cargado en el Text Area
                 enseñarGrafoVisualmente();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error cargando archivo: " + e.getMessage());
             }
+        }
+    }
+    
+    //Actualiza el seleccionador de paradas con las paradas del grafo
+    private void actualizarSeleccionarParada() {
+        seleccionarParada.removeAllItems();
+        for (int i = 0; i < grafo.getContParadas(); i++) {
+            seleccionarParada.addItem(grafo.getStop(i));
         }
     }
     
@@ -117,7 +130,11 @@ public class InterfazInteractuar extends javax.swing.JFrame {
 
     //Método para poner una sucursal
     private void ponerSucursal() {
-        JOptionPane.showMessageDialog(this, "Opción para poner una nueva sucursal está bajo construcción");
+        String paradaSeleccionada = (String) seleccionarParada.getSelectedItem();
+        if(paradaSeleccionada != null) {
+            grafo.ponerSucursal(paradaSeleccionada);
+            JOptionPane.showMessageDialog(this, "Sucursal puesta en: " + paradaSeleccionada);
+        }
     }
     
     //Método para revisar la covertura

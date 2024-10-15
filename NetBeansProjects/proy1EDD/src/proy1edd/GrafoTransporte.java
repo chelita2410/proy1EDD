@@ -11,15 +11,17 @@ package proy1edd;
  */
 public class GrafoTransporte {
     private String[] paradas;
-    private MiLista[] adyList; 
+    private MiLista[] adyList; //Lista de adyacencias
     private int contParadas;
     private int capacity;
+    private boolean[] sucursales; //Array para marcar qué paradas tienen sucursales
     
     //Constructor
     public GrafoTransporte() {
         capacity = 100; //capacidad inicial de paradas
         paradas = new String[capacity];
         adyList = new MiLista[capacity];
+        sucursales = new boolean[capacity]; // inicializa el array de sucursales
         contParadas = 0;
     }
     
@@ -30,6 +32,7 @@ public class GrafoTransporte {
         }
         paradas[contParadas] = parada;
         adyList[contParadas] = new MiLista();
+        sucursales[contParadas] = false; //Porque todavía no se ha puesto ninguna sucursal
         contParadas++;
     }
     
@@ -83,19 +86,36 @@ public class GrafoTransporte {
         adyList[indice2].add(parada1);
     }
     
+    //Marcar una parada como una sucursal
+    public void ponerSucursal(String parada) {
+        int indice = encontrarIndiceParada(parada);
+        if (indice != -1) {
+            sucursales[indice] = true;
+        }
+    }
+    
+    //Revisar si una parada es una sucursal
+    public boolean esSucursal(String parada) {
+        int indice = encontrarIndiceParada(parada);
+        return indice != -1 && sucursales[indice];
+    }
+
     
     //Cambia el tamaño del grafo cuando este llega a su capacidad máxima
     private void resizeGraph() {
         capacity *= 2;
         String[] nuevaParada = new String[capacity];
         MiLista[] nuevaAdyList = new MiLista[capacity];
+        boolean[] nuevaSucursal = new boolean[capacity];
         
         for (int i = 0; i < contParadas; i++) {
             nuevaParada[i] = paradas[i];
             nuevaAdyList[i] = adyList[i];
+            nuevaSucursal[i] = sucursales[i];
         }
         paradas = nuevaParada;
         adyList = nuevaAdyList;
+        sucursales = nuevaSucursal;
     }
     
 }
