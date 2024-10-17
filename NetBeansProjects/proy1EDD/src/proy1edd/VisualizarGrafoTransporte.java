@@ -4,6 +4,7 @@
  */
 package proy1edd;
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 /**
  *
@@ -28,6 +29,24 @@ public class VisualizarGrafoTransporte {
         }
         //Enseñar el grafo visualmente
         graphStream.display();
+    }
+    
+    public void highlightCobertura(MiLista paradasCubiertas) {
+        for (int i = 0; i < paradasCubiertas.size(); i++) {
+            //String parada = paradasCubiertas.get(i);
+            String parada = paradasCubiertas.get(i);
+            Node node = graphStream.getNode(paradasCubiertas.get(i));
+            if (node != null) {
+                node.setAttribute("ui.style", "node { fill-color: red; }");
+            }
+        }
+    }
+    
+    public void highlightSucursalSugerida(String parada) {
+        Node node = graphStream.getNode(parada);
+        if (node != null) {
+            node.setAttribute("ui.style", "node { fill-color: blue; }");
+        }
     }
     
 }

@@ -34,6 +34,7 @@ public class GrafoTransporte {
         adyList[contParadas] = new MiLista();
         sucursales[contParadas] = false; //Porque todavía no se ha puesto ninguna sucursal
         contParadas++;
+        System.out.println("Parada añadida: " + parada + " (Total paradas: " + contParadas + ")");
     }
     
     //Encontrar el índice de una parada específica
@@ -43,7 +44,7 @@ public class GrafoTransporte {
                 return i;
             }
         }
-        return -1;
+        return -1; //parada no encontrada
     }
     
     //Retorna la lista de adyacencias de una parada en un índice específico
@@ -74,16 +75,19 @@ public class GrafoTransporte {
         int indice2 = encontrarIndiceParada(parada2);
         
         if (indice1 == -1) {
+            System.out.println("Stop " + parada1 + "not found, adding it.");
             añadirParada(parada1);
             indice1 = contParadas -1;
         }
         if (indice2 == -1) {
+            System.out.println("Stop " + parada2 + "not found, adding it");
             añadirParada(parada2);
             indice2 = contParadas -1;
         }
         
         adyList[indice1].add(parada2);
         adyList[indice2].add(parada1);
+        System.out.println("Arista añadida exitosamente entre: " + parada1 + " y " + parada2);
     }
     
     //Marcar una parada como una sucursal
@@ -116,6 +120,40 @@ public class GrafoTransporte {
         paradas = nuevaParada;
         adyList = nuevaAdyList;
         sucursales = nuevaSucursal;
+        System.out.println("Grafo resized a nueva capacidad: " + capacity);
+    }
+    
+    public MiLista getParadasNoCubiertas(MiLista paradasCubiertas) {
+        MiLista paradasNoCubiertas = new MiLista();
+        for (int i = 0; i < contParadas; i++) {
+            String parada = paradas[i];
+            boolean esCubierto = false;
+            for (int j = 0; j < paradasCubiertas.size(); j++) {
+                if(paradasCubiertas.get(j).equals(parada)) {
+                    esCubierto = true;
+                    break;
+                }
+            }
+        if (!esCubierto) {
+            paradasNoCubiertas.add(parada);
+            }    
+        
+        }
+        return paradasNoCubiertas;
+    }
+    
+    public String sugerirNuevaSucursal(MiLista paradasNoCubiertas, int t) {
+        String mejorParada = null;
+        int mayorCobertura = 0;
+        for (int i = 0; i < paradasNoCubiertas.size(); i++) {
+            String paradaCandidato = paradasNoCubiertas.get(i);
+            MiLista coberturaCandidato = CalcularBFS.calculadorBFS(this, paradaCandidato, t);
+            if (coberturaCandidato.size() > mayorCobertura) {
+                mayorCobertura = coberturaCandidato.size();
+                mejorParada = paradaCandidato;
+            }
+        }
+        return mejorParada;
     }
     
 }

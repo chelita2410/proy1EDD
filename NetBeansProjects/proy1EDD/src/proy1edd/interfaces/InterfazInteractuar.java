@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import proy1edd.CargarGrafoTransporte;
 import proy1edd.GrafoTransporte;
 import proy1edd.VisualizarGrafoTransporte;
+import proy1edd.MiLista;
+import proy1edd.CalcularBFS;
 
 
 /**
@@ -17,9 +19,18 @@ import proy1edd.VisualizarGrafoTransporte;
  * @author chela
  */
 public class InterfazInteractuar extends javax.swing.JFrame {
+    private VisualizarGrafoTransporte visualizar;
     private GrafoTransporte grafo; //Objeto grafo
     private JComboBox<String> seleccionarParada; //Enseña todas las paradas para seleccionar en cual se pone la sucursal
     
+/**NO ME INICIALIZA EL GRAFO Y POR LO TANTO ME DA ERROR AL TRATAR 
+ DE VER LA COBERTURA Y/O DE SUGERIR NUEVAS SUCURSALES.
+ BUSCAR SOLUCION PARA QUE ME INICIALICE EL GRAFO
+ 
+ FALTAN LAS PILAS Y LA BUSQUEDA POR DFA
+ 
+ TODAVIA ME DA ERROR EN EL PRIMER NODO AL CARGAR EL JSON AUNQUE ESTE APARENTEMENTE
+ NO AFECTA EN NADA*/
     
 
     /**
@@ -28,10 +39,13 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     
     public InterfazInteractuar() {
         setTitle("Cobertura sucursales por red de transporte");
-        setSize(600, 400);
+        setSize(1000, 800);
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         setLayout(new BorderLayout());
+        grafo = new GrafoTransporte();
+ 
+
         
         //Crear menú
         JMenuBar menuBar = new JMenuBar();
@@ -42,25 +56,32 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         setJMenuBar(menuBar);
         
         //Área para enseñar el grafo
+        //visualizar = new VisualizarGrafoTransporte(grafo);
         ensenarGrafo = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(ensenarGrafo);
         add(scrollPane, BorderLayout.CENTER);
         
         //Acciones realizadas por el usuario
+       
         JPanel controlPanel = new JPanel();
         seleccionarParada = new JComboBox<>();
+        tValueField = new JTextField(3);
         JButton nuevaSucursalButton = new JButton("Establecer Nueva Sucursal");
         JButton revisarCoberturaButton = new JButton("Revisar Cobertura");
+        JButton sugerirSucursalButton = new JButton("Sugerir Nueva Sucursal");
+        controlPanel.add(new JLabel("Seleccionar Parada:"));
         controlPanel.add(seleccionarParada);
+        controlPanel.add(new JLabel("t:"));
+        controlPanel.add(tValueField);
         controlPanel.add(nuevaSucursalButton);
         controlPanel.add(revisarCoberturaButton);
+        controlPanel.add(sugerirSucursalButton);
         add(controlPanel, BorderLayout.SOUTH);
         
         //Acción para cargar la red de transporte
         loadMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { 
-                //PQ ME DA ERROR/
                 cargarRedTransporte();
             }
         });
@@ -68,7 +89,6 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         nuevaSucursalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //PQ ME DA ERROR/
                 ponerSucursal();
             }
         });
@@ -76,20 +96,27 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         revisarCoberturaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //PQ ME DA ERROR
                 revisarCobertura();
             }
         });
+        
+        sugerirSucursalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    sugerirNuevaSucursal();
+            }        
+        });
     }
     
-    private void enseñarGrafoVisualmente() {
+    /*private void enseñarGrafoVisualmente() {
         if(grafo != null) {
             new VisualizarGrafoTransporte(grafo); //Enseña el grafo usando GraphStream
         }
-    }
+    }*/
     
     //Método para cargar la Red de Transporte
     private void cargarRedTransporte() {
+        grafo = new GrafoTransporte();
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -98,8 +125,12 @@ public class InterfazInteractuar extends javax.swing.JFrame {
                 String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                 CargarGrafoTransporte.cargarDesdeJSON(grafo, filePath);
                 actualizarSeleccionarParada();
-                enseñarGrafo(); //Enseña el grafo cargado en el Text Area
-                enseñarGrafoVisualmente();
+                visualizar = new VisualizarGrafoTransporte(grafo);
+                ensenarGrafo.setText("Red de Transporte Cargada\n");
+                
+                this.revalidate();
+                this.repaint();
+                //enseñarGrafo();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error cargando archivo: " + e.getMessage());
             }
@@ -115,7 +146,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     }
     
     //Método para enseñar el grafo en el Text Area
-    private void enseñarGrafo() {
+   /* private void enseñarGrafo() {
         if (grafo != null) {
             ensenarGrafo.setText(""); //Limpia el texto previo
             for (int i = 0; i < grafo.getContParadas(); i++) {
@@ -127,19 +158,75 @@ public class InterfazInteractuar extends javax.swing.JFrame {
             }
         }
     }
-
+*/
     //Método para poner una sucursal
     private void ponerSucursal() {
         String paradaSeleccionada = (String) seleccionarParada.getSelectedItem();
         if(paradaSeleccionada != null) {
             grafo.ponerSucursal(paradaSeleccionada);
             JOptionPane.showMessageDialog(this, "Sucursal puesta en: " + paradaSeleccionada);
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una parada para poner una sucursal");
         }
     }
     
     //Método para revisar la covertura
     private void revisarCobertura() {
-        JOptionPane.showMessageDialog(this, "Opción para revisar cobertura está bajo construcción");
+        String paradaSeleccionada = (String) seleccionarParada.getSelectedItem();
+        if (paradaSeleccionada != null) {
+            try {
+                int t = Integer.parseInt(tValueField.getText());
+                MiLista paradasCubiertas = CalcularBFS.calculadorBFS(grafo, paradaSeleccionada, t);
+                
+                if(visualizar != null) {
+                    enseñarCobertura(paradasCubiertas);
+                    visualizar.highlightCobertura(paradasCubiertas);
+                } else {
+                    JOptionPane.showMessageDialog(this, "La visualización del grafo no está iniciada");
+                }
+                //MiLista paradasNoCubiertas = grafo.getParadasNoCubiertas(paradasCubiertas);
+                //enseñarCobertura(paradasCubiertas);
+                //VisualizarGrafoTransporte visualizar = new VisualizarGrafoTransporte(grafo);
+               // visualizar.highlightCobertura(paradasCubiertas);   
+                
+                //if (paradasNoCubiertas.size() > 0) {
+                 //   JOptionPane.showMessageDialog(this, "Todavía hay paradas que no están cubiertas");
+                
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido para t");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione una parada"); 
+        }
+    }
+    
+    private void enseñarCobertura(MiLista paradasCubiertas) {
+        ensenarGrafo.append("\nParadas cubiertas de la sucursal:\n");
+        for (int i = 0; i < paradasCubiertas.size(); i++) {
+            ensenarGrafo.append(paradasCubiertas.get(i) + "\n");
+        }
+    }
+    
+    private void sugerirNuevaSucursal() {
+        try {
+            int t = Integer.parseInt(tValueField.getText());
+            MiLista paradasCubiertas = CalcularBFS.calculadorBFS(grafo, (String) seleccionarParada.getSelectedItem(), t);
+            MiLista paradasNoCubiertas = grafo.getParadasNoCubiertas(paradasCubiertas);
+           if (visualizar != null) {
+            if (paradasNoCubiertas.size() > 0) {
+                String paradaSugerida = grafo.sugerirNuevaSucursal(paradasNoCubiertas, t);
+                visualizar.highlightSucursalSugerida(paradaSugerida);
+                JOptionPane.showMessageDialog(this, "Localización sugerida para la nueva sucursal: " + paradaSugerida);
+            } else {
+                JOptionPane.showMessageDialog(this, "Todas las paradas ya están cubiertas");
+            }
+           } else {
+               JOptionPane.showMessageDialog(this, "La visualización del grafo no está iniciada");
+           }  
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor ingresa un número válido para t");
+        }
+        
     }
     
     /**
@@ -156,14 +243,14 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        distanciaSucursales = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         ensenarGrafo = new javax.swing.JTextArea();
         jFileChooser1 = new javax.swing.JFileChooser();
         nuevaSucursal = new javax.swing.JButton();
         revisarCobertura = new javax.swing.JButton();
+        sugerirSucursal = new javax.swing.JButton();
+        tValueField = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -188,12 +275,6 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         jLabel5.setText("t =");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, -1, -1));
 
-        distanciaSucursales.setColumns(20);
-        distanciaSucursales.setRows(5);
-        jScrollPane2.setViewportView(distanciaSucursales);
-
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 450, 410, 30));
-
         jLabel4.setText("Enseñar grafo:");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 500, -1, -1));
 
@@ -209,6 +290,10 @@ public class InterfazInteractuar extends javax.swing.JFrame {
 
         revisarCobertura.setText("Revisar Cobertura");
         getContentPane().add(revisarCobertura, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 670, -1, -1));
+
+        sugerirSucursal.setText("Sugerir Nueva Sucursal");
+        getContentPane().add(sugerirSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 670, -1, -1));
+        getContentPane().add(tValueField, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, -1, -1));
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -257,7 +342,6 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea distanciaSucursales;
     private javax.swing.JTextArea ensenarGrafo;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
@@ -270,8 +354,9 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton nuevaSucursal;
     private javax.swing.JButton revisarCobertura;
+    private javax.swing.JButton sugerirSucursal;
+    private javax.swing.JTextField tValueField;
     // End of variables declaration//GEN-END:variables
 }
