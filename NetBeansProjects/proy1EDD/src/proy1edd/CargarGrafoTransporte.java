@@ -31,6 +31,8 @@ public class CargarGrafoTransporte {
         reader.close();
         String json = content.toString().trim();
         parseJSON(json, grafo);
+        
+        
     }
     
     private static void parseJSON(String json, GrafoTransporte grafo) {
@@ -39,6 +41,7 @@ public class CargarGrafoTransporte {
         String nombreParada = null;
         boolean enLinea = false;
         boolean enParadas = false;
+        String paradaAnterior = null;
         
         while (i < json.length()) {
             char ch = json.charAt(i);
@@ -60,14 +63,16 @@ public class CargarGrafoTransporte {
             }
             while (enParadas && i < json.length()) {
                 ch = json.charAt(i);
+                
                 if(ch == '"') {
                     i++;
+                    
                     while (json.charAt(i) != '"') {
-                        nombreParada += json.charAt(i);
+                       nombreParada += json.charAt(i);
                         i++;
                     }
                     grafo.añadirParada(nombreParada);
-                    if (grafo.getContParadas() > 1) {
+                    if(grafo.getContParadas() > 1) {
                         String nombreParadaPrevia = grafo.getStop(grafo.getContParadas() - 2);
                         grafo.añadirArista(nombreParadaPrevia, nombreParada);
                     }

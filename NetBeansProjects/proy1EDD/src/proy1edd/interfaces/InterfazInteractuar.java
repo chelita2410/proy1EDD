@@ -39,7 +39,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     
     public InterfazInteractuar() {
         setTitle("Cobertura sucursales por red de transporte");
-        setSize(1000, 800);
+        setSize(800, 600);
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         setLayout(new BorderLayout());
@@ -108,24 +108,27 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         });
     }
     
-    /*private void enseñarGrafoVisualmente() {
+    private void enseñarGrafoVisualmente() {
         if(grafo != null) {
             new VisualizarGrafoTransporte(grafo); //Enseña el grafo usando GraphStream
         }
-    }*/
+    }
     
     //Método para cargar la Red de Transporte
     private void cargarRedTransporte() {
-        grafo = new GrafoTransporte();
+        //grafo = new GrafoTransporte();
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             try {
-                grafo = new GrafoTransporte(); //Inicializa el grafo
+                //grafo = new GrafoTransporte(); //Inicializa el grafo
                 String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                 CargarGrafoTransporte.cargarDesdeJSON(grafo, filePath);
                 actualizarSeleccionarParada();
-                visualizar = new VisualizarGrafoTransporte(grafo);
+                if (grafo != null) {
+                    visualizar = new VisualizarGrafoTransporte(grafo);
+                }
+                //visualizar = new VisualizarGrafoTransporte(grafo);
                 ensenarGrafo.setText("Red de Transporte Cargada\n");
                 
                 this.revalidate();
