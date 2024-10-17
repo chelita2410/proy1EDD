@@ -54,6 +54,4 @@ public class MiLista {
     public int size() {
         return size;
     }
-    
-    
 }

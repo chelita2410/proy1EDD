@@ -12,6 +12,7 @@ import proy1edd.GrafoTransporte;
 import proy1edd.VisualizarGrafoTransporte;
 import proy1edd.MiLista;
 import proy1edd.CalcularBFS;
+import proy1edd.CalcularDFS;
 
 
 /**
@@ -69,6 +70,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         JButton nuevaSucursalButton = new JButton("Establecer Nueva Sucursal");
         JButton revisarCoberturaButton = new JButton("Revisar Cobertura");
         JButton sugerirSucursalButton = new JButton("Sugerir Nueva Sucursal");
+        JButton buscarDFSButton = new JButton ("Busqueda por DFS");
         controlPanel.add(new JLabel("Seleccionar Parada:"));
         controlPanel.add(seleccionarParada);
         controlPanel.add(new JLabel("t:"));
@@ -76,6 +78,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         controlPanel.add(nuevaSucursalButton);
         controlPanel.add(revisarCoberturaButton);
         controlPanel.add(sugerirSucursalButton);
+        controlPanel.add(buscarDFSButton);
         add(controlPanel, BorderLayout.SOUTH);
         
         //Acción para cargar la red de transporte
@@ -106,13 +109,20 @@ public class InterfazInteractuar extends javax.swing.JFrame {
                     sugerirNuevaSucursal();
             }        
         });
+        
+        buscarDFSButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarDFS();
+            }
+        });
     }
     
-    private void enseñarGrafoVisualmente() {
+   /* private void enseñarGrafoVisualmente() {
         if(grafo != null) {
             new VisualizarGrafoTransporte(grafo); //Enseña el grafo usando GraphStream
         }
-    }
+    } **/
     
     //Método para cargar la Red de Transporte
     private void cargarRedTransporte() {
@@ -202,6 +212,17 @@ public class InterfazInteractuar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor seleccione una parada"); 
         }
     }
+    // DA ERROR Y NO SE QUITA POR ALGUNA RAZON 
+    private void buscarDFS() {
+        String paradaSeleccionada = (String) seleccionarParada.getSelectedItem();
+        if (paradaSeleccionada != null) {
+            MiLista resultadoDFS = CalcularDFS.calculadorDFS(grafo, paradaSeleccionada);
+            JOptionPane.showMessageDialog(this, "Resultado de DFS desde " + paradaSeleccionada + ":");
+            for (int i = 0; i < resultadoDFS.size(); i++) {
+                JOptionPane.showMessageDialog(this, "Por favor selecciona una parada para buscar");
+            }
+        }
+    }
     
     private void enseñarCobertura(MiLista paradasCubiertas) {
         ensenarGrafo.append("\nParadas cubiertas de la sucursal:\n");
@@ -229,6 +250,8 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Por favor ingresa un número válido para t");
         }
+        
+       
         
     }
     
