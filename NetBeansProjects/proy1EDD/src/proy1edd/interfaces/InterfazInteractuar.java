@@ -40,8 +40,17 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     
     public InterfazInteractuar() {
         setTitle("Cobertura sucursales por red de transporte");
-        setSize(800, 600);
-        this.setLocationRelativeTo(null);
+       // setSize(800, 600);
+        //this.setLocationRelativeTo(null);
+        this.setUndecorated(false);
+        this.setAlwaysOnTop(true);
+        this.setResizable(true);
+        this.setVisible(true);
+        Toolkit a = Toolkit.getDefaultToolkit();
+        int xSize = (int) a.getScreenSize().getWidth();
+        int ySize = (int) a.getScreenSize().getHeight();
+        this.setSize(xSize, ySize);
+                
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         setLayout(new BorderLayout());
         grafo = new GrafoTransporte();
