@@ -183,7 +183,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         }
     }
     
-    //Método para revisar la covertura
+    //Método para revisar la covertura buscando por BFS
     private void revisarCobertura() {
         String paradaSeleccionada = (String) seleccionarParada.getSelectedItem();
         if (paradaSeleccionada != null) {
@@ -212,15 +212,18 @@ public class InterfazInteractuar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor seleccione una parada"); 
         }
     }
-    // DA ERROR Y NO SE QUITA POR ALGUNA RAZON 
+     
     private void buscarDFS() {
         String paradaSeleccionada = (String) seleccionarParada.getSelectedItem();
         if (paradaSeleccionada != null) {
             MiLista resultadoDFS = CalcularDFS.calculadorDFS(grafo, paradaSeleccionada);
             JOptionPane.showMessageDialog(this, "Resultado de DFS desde " + paradaSeleccionada + ":");
             for (int i = 0; i < resultadoDFS.size(); i++) {
-                JOptionPane.showMessageDialog(this, "Por favor selecciona una parada para buscar");
+                JOptionPane.showMessageDialog(this, resultadoDFS.get(i));
+                
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una parada para buscar");
         }
     }
     
@@ -231,6 +234,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         }
     }
     
+    //por bfs
     private void sugerirNuevaSucursal() {
         try {
             int t = Integer.parseInt(tValueField.getText());
