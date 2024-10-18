@@ -71,6 +71,13 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         JButton revisarCoberturaButton = new JButton("Revisar Cobertura");
         JButton sugerirSucursalButton = new JButton("Sugerir Nueva Sucursal");
         JButton buscarDFSButton = new JButton ("Busqueda por DFS");
+        JTextField anadeLineaField = new JTextField(5);
+        JButton anadeLineaButton = new JButton("Agregar Linea");
+        //JButton verificarCoberturaButton = new JButton("Verificar cobertura completa");
+       // controlPanel.add(verificarCoberturaButton);
+        controlPanel.add(new JLabel("Agregar Linea:"));
+        controlPanel.add(anadeLineaField);
+        controlPanel.add(anadeLineaButton);
         controlPanel.add(new JLabel("Seleccionar Parada:"));
         controlPanel.add(seleccionarParada);
         controlPanel.add(new JLabel("t:"));
@@ -81,6 +88,24 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         controlPanel.add(buscarDFSButton);
         add(controlPanel, BorderLayout.SOUTH);
         
+        /**verificarCoberturaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean estaCubiertoCompletamente = verificarCoberturaCompleta();
+                if (estaCubiertoCompletamente) {
+                    JOptionPane.showMessageDialog(null, "Todas las paradas estan cubiertas");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No todas las paradas estan cubiertas");
+                }
+            }
+        });
+        */
+        anadeLineaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                agregarLinea(anadeLineaField.getText());
+            }
+        });
         //Acción para cargar la red de transporte
         loadMenuItem.addActionListener(new ActionListener() {
             @Override
@@ -124,6 +149,35 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         }
     } **/
     
+    private void agregarLinea(String lineaParadas) {
+        if (lineaParadas == null || lineaParadas.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingresa una secuencia de paradas");
+            return;
+        }
+        String[] paradas = lineaParadas.split(",");
+        for (int i = 0; i < paradas.length; i++) {
+            paradas[i] = paradas[i].trim();
+            
+        }
+        for (int i = 0; i < paradas.length; i++) {
+            if (!grafo.existeParada(paradas[i])) {
+                grafo.añadirParada(paradas[i]);
+            }
+            if (i > 0) {
+                grafo.añadirArista(paradas[i - 1], paradas[i]);
+            }
+        }
+        actualizarSeleccionarParada();
+        JOptionPane.showMessageDialog(this, "Linea agregada: " + lineaParadas);
+    }
+    
+    private boolean verificarCoberturaCompleta() {
+        if (grafo.getContParadas() == 0) {
+            return false;
+        }
+        MiLista paradasVisitadas = CalcularDFS.calculadorDFS(grafo, grafo.getStop(0));
+        return paradasVisitadas.size() == grafo.getContParadas();
+    }
     //Método para cargar la Red de Transporte
     private void cargarRedTransporte() {
         //grafo = new GrafoTransporte();
