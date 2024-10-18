@@ -90,6 +90,10 @@ public class GrafoTransporte {
         System.out.println("Arista añadida exitosamente entre: " + parada1 + " y " + parada2);
     }
     
+    public boolean existeParada(String parada) {
+        return encontrarIndiceParada(parada) != -1;
+    }
+    
     //Marcar una parada como una sucursal
     public void ponerSucursal(String parada) {
         int indice = encontrarIndiceParada(parada);
