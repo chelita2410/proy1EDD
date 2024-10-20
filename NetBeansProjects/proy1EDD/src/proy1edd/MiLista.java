@@ -54,4 +54,14 @@ public class MiLista {
     public int size() {
         return size;
     }
+    
+    //Verifica si la lista contiene un elemento espec&iacute;fico
+    public boolean contains(String value) {
+        for (int i = 0; i < size; i++) {
+            if (data[i].equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

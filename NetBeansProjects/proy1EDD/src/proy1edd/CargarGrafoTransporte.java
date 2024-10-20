@@ -66,11 +66,13 @@ public class CargarGrafoTransporte {
                 
                 if(ch == '"') {
                     i++;
+                    nombreParada = "";
                     
                     while (json.charAt(i) != '"') {
                        nombreParada += json.charAt(i);
                         i++;
                     }
+                    i++;
                     if (!grafo.contieneParada(nombreParada)) {
                         grafo.añadirParada(nombreParada);
                     }
@@ -78,7 +80,7 @@ public class CargarGrafoTransporte {
                         grafo.añadirArista(paradaAnterior, nombreParada);
                     }
                     paradaAnterior = nombreParada;
-                    nombreParada = "";
+                    //nombreParada = "";
                     i++;
                     
                         
@@ -97,7 +99,7 @@ public class CargarGrafoTransporte {
                         i++;
                     }
                     //Revisar si si funciona y si no poner i += 3
-                    i += 1;
+                    i++;
                     while (json.charAt(i) != '"') {
                         destino += json.charAt(i);
                         i++;

@@ -40,6 +40,7 @@ public class CalcularBFS {
             //Añade la parada a la lista cubierta si está dentro de la distancia t
             if (distancia[indiceActual] <= t) {
                 paradasCubiertas.add(paradaActual);
+                System.out.println("adding covered stop to list " + paradaActual);
             }
             //Ver paradas adyacentes
             for (int i = 0; i < grafo.getAdyList(indiceActual).size(); i++) {
