@@ -7,12 +7,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 import proy1edd.CargarGrafoTransporte;
 import proy1edd.GrafoTransporte;
 import proy1edd.VisualizarGrafoTransporte;
 import proy1edd.MiLista;
 import proy1edd.CalcularBFS;
 import proy1edd.CalcularDFS;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.swing_viewer.ViewPanel;
+
 
 
 /**
@@ -23,6 +30,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     private VisualizarGrafoTransporte visualizar;
     private GrafoTransporte grafo; //Objeto grafo
     private JComboBox<String> seleccionarParada; //Enseña todas las paradas para seleccionar en cual se pone la sucursal
+    private JPanel graphPanel;
     
 /**NO ME INICIALIZA EL GRAFO Y POR LO TANTO ME DA ERROR AL TRATAR 
  DE VER LA COBERTURA Y/O DE SUGERIR NUEVAS SUCURSALES.
@@ -67,9 +75,11 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         
         //Área para enseñar el grafo
         //visualizar = new VisualizarGrafoTransporte(grafo);
-        ensenarGrafo = new JTextArea();
-        JScrollPane scrollPane = new JScrollPane(ensenarGrafo);
-        add(scrollPane, BorderLayout.CENTER);
+       // ensenarGrafo = new JTextArea();
+        graphPanel = new JPanel(new BorderLayout());
+        add(graphPanel, BorderLayout.CENTER);
+        //JScrollPane scrollPane = new JScrollPane(ensenarGrafo);
+        //add(scrollPane, BorderLayout.CENTER);
         
         //Acciones realizadas por el usuario
        
@@ -177,6 +187,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
             }
         }
         actualizarSeleccionarParada();
+        visualizar = new VisualizarGrafoTransporte(grafo);
         JOptionPane.showMessageDialog(this, "Linea agregada: " + lineaParadas);
     }
     
@@ -187,25 +198,26 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         MiLista paradasVisitadas = CalcularDFS.calculadorDFS(grafo, grafo.getStop(0));
         return paradasVisitadas.size() == grafo.getContParadas();
     }
+    
     //Método para cargar la Red de Transporte
     private void cargarRedTransporte() {
-        //grafo = new GrafoTransporte();
+        grafo = new GrafoTransporte();
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             try {
-                //grafo = new GrafoTransporte(); //Inicializa el grafo
+                grafo = new GrafoTransporte(); //Inicializa el grafo
                 String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                 CargarGrafoTransporte.cargarDesdeJSON(grafo, filePath);
                 actualizarSeleccionarParada();
-                if (grafo != null) {
+                /*if (grafo != null) {
                     visualizar = new VisualizarGrafoTransporte(grafo);
-                }
+                }*/
                 //visualizar = new VisualizarGrafoTransporte(grafo);
-                ensenarGrafo.setText("Red de Transporte Cargada\n");
-                
-                this.revalidate();
-                this.repaint();
+                //ensenarGrafo.setText("Red de Transporte Cargada\n");
+                enseñarGrafo();
+                //this.revalidate();
+                //this.repaint();
                 //enseñarGrafo();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error cargando archivo: " + e.getMessage());
@@ -222,19 +234,70 @@ public class InterfazInteractuar extends javax.swing.JFrame {
     }
     
     //Método para enseñar el grafo en el Text Area
-   /* private void enseñarGrafo() {
-        if (grafo != null) {
-            ensenarGrafo.setText(""); //Limpia el texto previo
-            for (int i = 0; i < grafo.getContParadas(); i++) {
-                ensenarGrafo.append(grafo.getStop(i) + ": ");
-                for (int j = 0; j < grafo.getAdyList(i).size(); j++) {
-                    ensenarGrafo.append(grafo.getAdyList(i).get(j) + " ");
+    private void enseñarGrafo() {
+        graphPanel.removeAll();
+        System.setProperty("org.graphstream.ui", "swing");
+        Graph graph = new SingleGraph("Red de trasporte");
+        graph.setAttribute("ui.stylesheet", "graph { fill-color: #EEE; }");
+        for (int i = 0; i < grafo.getContParadas(); i++) {
+            String parada = grafo.getStop(i);
+            graph.addNode(parada);
+            graph.getNode(parada).setAttribute("ui.label", parada);
+            
+            }
+        for (int i  = 0; i < grafo.getContParadas(); i++) {
+                String sourceStop = grafo.getStop(i);
+                MiLista adyList = grafo.getAdyList(i);
+                
+                for (int j = 0; j < adyList.size(); j++) {
+                    String targetStop = adyList.get(j);
+                    String edgeId = sourceStop + targetStop;
+                    
+                    if (graph.getNode(sourceStop) != null && graph.getNode(targetStop) != null) {
+                        if (graph.getEdge(edgeId) == null & graph.getEdge(targetStop + sourceStop) == null) {
+                            graph.addEdge(edgeId, sourceStop, targetStop);
+                        }
+                    }
                 }
-                ensenarGrafo.append("\n");
+        }
+        Viewer viewer = graph.display();
+        ViewPanel viewPanel = (ViewPanel) viewer.getDefaultView();
+       // Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_SWING);
+        viewer.enableAutoLayout();
+       // Component view = viewer.addDefaultView(false);
+        graphPanel.add(viewPanel, BorderLayout.CENTER);
+        graphPanel.revalidate();
+        graphPanel.repaint();
+        
+    }
+        /**ensenarGrafo.setText("");
+        if (grafo == null || grafo.getContParadas() == 0) {
+            ensenarGrafo.append("No hay paradas en el grafo\n");
+            return;
+        }
+        ensenarGrafo.append("Paradas en la red de transporte\n");
+        for (int i = 0; i < grafo.getContParadas(); i++) {
+            String parada = grafo.getStop(i);
+            ensenarGrafo.append(parada + "\n");
+        }
+        ensenarGrafo.append("\nConexiones entre paradas:\n");
+        for (int i = 0; i < grafo.getContParadas(); i ++) {
+            String sourceStop = grafo.getStop(i);
+            MiLista adyList = grafo.getAdyList(i);
+            for (int j = 0; j < adyList.size(); j++) {
+                String targetStop = adyList.get(j);
+                ensenarGrafo.append(sourceStop + "--" + targetStop + "\n");
+                
             }
         }
+        ensenarGrafo.revalidate();
+        ensenarGrafo.repaint();
+        
     }
-*/
+
+    
+    */
+   
     //Método para poner una sucursal
     private void ponerSucursal() {
         String paradaSeleccionada = (String) seleccionarParada.getSelectedItem();
@@ -253,8 +316,9 @@ public class InterfazInteractuar extends javax.swing.JFrame {
             try {
                 int t = Integer.parseInt(tValueField.getText());
                 MiLista paradasCubiertas = CalcularBFS.calculadorBFS(grafo, paradaSeleccionada, t);
-                
-                if(visualizar != null) {
+                enseñarCobertura(paradasCubiertas);
+                visualizar.highlightCobertura(paradasCubiertas);
+                /*if(visualizar != null) {
                     enseñarCobertura(paradasCubiertas);
                     visualizar.highlightCobertura(paradasCubiertas);
                 } else {
@@ -267,7 +331,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
                 
                 //if (paradasNoCubiertas.size() > 0) {
                  //   JOptionPane.showMessageDialog(this, "Todavía hay paradas que no están cubiertas");
-                
+                */
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido para t");
             }
@@ -297,20 +361,30 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         }
     }
     
+   /** public void CrearGraphStream() {
+        System.setProperty("org.graphstream.ui", "swing");
+        Graph grafo = new SingleGraph("Red de Transporte");
+        grafo.setAttribute("ui.stylesheet", "graph { fill-color: #EEE; }");
+        if (grafo == null || grafo.getCont)
+            
+        }
+        
+    } */
+    
     //por bfs
     private void sugerirNuevaSucursal() {
         try {
             int t = Integer.parseInt(tValueField.getText());
             MiLista paradasCubiertas = CalcularBFS.calculadorBFS(grafo, (String) seleccionarParada.getSelectedItem(), t);
             MiLista paradasNoCubiertas = grafo.getParadasNoCubiertas(paradasCubiertas);
-           if (visualizar != null) {
+           //if (visualizar != null) {
             if (paradasNoCubiertas.size() > 0) {
                 String paradaSugerida = grafo.sugerirNuevaSucursal(paradasNoCubiertas, t);
                 visualizar.highlightSucursalSugerida(paradaSugerida);
                 JOptionPane.showMessageDialog(this, "Localización sugerida para la nueva sucursal: " + paradaSugerida);
-            } else {
-                JOptionPane.showMessageDialog(this, "Todas las paradas ya están cubiertas");
-            }
+            /**} else {
+                JOptionPane.showMessageDialog(this, "Todas las paradas ya están cubiertas"); 
+            } */
            } else {
                JOptionPane.showMessageDialog(this, "La visualización del grafo no está iniciada");
            }  

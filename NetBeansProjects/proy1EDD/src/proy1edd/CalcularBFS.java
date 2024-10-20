@@ -5,10 +5,18 @@
 package proy1edd;
 
 /**
- *
- * @author chela
+ * Clase que implementa el algoritmo de b&uacute;queda en anchura (BFS)
+ * para calcular las paradas cubiertas en el grafo de transporte.
  */
 public class CalcularBFS {
+   /**
+    *Calcula las paradas alcanzables dentro de una distancia m&aacure;xima desde
+    * una parada inicial en el grafo del transporte.
+    * @param grafo el grafo que contiene las paradas y sus conexiones.
+    * @param paradaSucursal el nombre de la parada inicial desde donde comienza el BFS.
+    * @param t la distancia m&aacute;xima permitida para cubrir las paradas.
+    * @return una lista de paradas cubiertas dentro de la distancia t desde la parada inicial.
+    */
     public static MiLista calculadorBFS(GrafoTransporte grafo, String paradaSucursal, int t) {
         MiLista paradasCubiertas = new MiLista();
         boolean[] visitadas = new boolean[grafo.getContParadas()];
@@ -24,6 +32,7 @@ public class CalcularBFS {
         visitadas[empezarIndice] = true;
         distancia[empezarIndice] = 0;
         
+        //Ejecutar el algoritmo BFS
         while (!cola.isEmpty()) {
             String paradaActual = cola.removerPrimero();
             int indiceActual = grafo.encontrarIndiceParada(paradaActual);

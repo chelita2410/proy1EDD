@@ -10,11 +10,16 @@ import org.graphstream.graph.implementations.SingleGraph;
  *
  * @author chela
  */
+
+/* SEGURO TENFO QUE DECLARAR THIS.VISUALIZAR AQUI // VERIFICAR ESO */
 public class VisualizarGrafoTransporte {
-    private Graph graphStream;
+    public Graph graphStream;
+    
     
     public VisualizarGrafoTransporte(GrafoTransporte grafoTransporte) {
         graphStream = new SingleGraph("Red de Transporte");
+        
+        graphStream.setAttribute("ui.stylesheet", "node { fill-color: gray; size: 20px; }");
         
         //Agrega vértices y aristas a GraphStream
         for (int i = 0; i < grafoTransporte.getContParadas(); i++) {
@@ -28,16 +33,17 @@ public class VisualizarGrafoTransporte {
             }
         }
         //Enseñar el grafo visualmente
-        graphStream.display();
+        graphStream.display(true);
     }
     
     public void highlightCobertura(MiLista paradasCubiertas) {
         for (int i = 0; i < paradasCubiertas.size(); i++) {
             //String parada = paradasCubiertas.get(i);
             String parada = paradasCubiertas.get(i);
-            Node node = graphStream.getNode(paradasCubiertas.get(i));
+            Node node = graphStream.getNode(parada);
+           // Node node = graphStream.getNode(paradasCubiertas.get(i));
             if (node != null) {
-                node.setAttribute("ui.style", "node { fill-color: red; }");
+                node.setAttribute("ui.style", "fill-color: red;");
             }
         }
     }
@@ -45,7 +51,7 @@ public class VisualizarGrafoTransporte {
     public void highlightSucursalSugerida(String parada) {
         Node node = graphStream.getNode(parada);
         if (node != null) {
-            node.setAttribute("ui.style", "node { fill-color: blue; }");
+            node.setAttribute("ui.style", "fill-color: blue;");
         }
     }
     

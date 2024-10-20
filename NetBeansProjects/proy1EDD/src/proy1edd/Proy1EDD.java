@@ -6,12 +6,13 @@ package proy1edd;
 import proy1edd.interfaces.InterfazUnica;
 
 /**
- *
- * @author chela
+ * Clase <code> main </code> del proyecto
+ * 
  */
 public class Proy1EDD {
 
     /**
+     * M&eacute;todo principal que ejecuta el programa.
      * @param args the command line arguments
      */
     public static void main(String[] args) {
