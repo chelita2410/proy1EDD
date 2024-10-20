@@ -264,6 +264,10 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         ViewPanel viewPanel = (ViewPanel) viewer.getDefaultView();
        // Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_SWING);
         viewer.enableAutoLayout();
+       /* viewPanel.addMouseWheelListener(e -> {
+            double zoomFactor = Math.pow(1.05, e.getPreciseWheelRotation());
+            viewPanel.getCamera().setViewPercent(viewPanel.getCamera().getViewPercent() * zoomFactor); 
+        }); */
        // Component view = viewer.addDefaultView(false);
         graphPanel.add(viewPanel, BorderLayout.CENTER);
         graphPanel.revalidate();
@@ -318,6 +322,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
                 MiLista paradasCubiertas = CalcularBFS.calculadorBFS(grafo, paradaSeleccionada, t);
                 enseñarCobertura(paradasCubiertas);
                 visualizar.highlightCobertura(paradasCubiertas);
+                graphPanel.repaint();
                 /*if(visualizar != null) {
                     enseñarCobertura(paradasCubiertas);
                     visualizar.highlightCobertura(paradasCubiertas);

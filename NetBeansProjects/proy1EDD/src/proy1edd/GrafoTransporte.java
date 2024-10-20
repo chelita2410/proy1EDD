@@ -27,6 +27,9 @@ public class GrafoTransporte {
     
     //Añadir una parada al grafo
     public void añadirParada(String parada) {
+        if (contieneParada(parada)) {
+            return;
+        }
         if (contParadas == capacity) {
             resizeGraph();
         }
@@ -93,6 +96,12 @@ public class GrafoTransporte {
     public boolean existeParada(String parada) {
         return encontrarIndiceParada(parada) != -1;
     }
+    
+    public boolean contieneParada(String parada) {
+        return encontrarIndiceParada(parada) != -1;
+    }
+    
+
     
     //Marcar una parada como una sucursal
     public void ponerSucursal(String parada) {

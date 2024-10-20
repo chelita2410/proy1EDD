@@ -71,14 +71,49 @@ public class CargarGrafoTransporte {
                        nombreParada += json.charAt(i);
                         i++;
                     }
-                    grafo.añadirParada(nombreParada);
+                    if (!grafo.contieneParada(nombreParada)) {
+                        grafo.añadirParada(nombreParada);
+                    }
+                    if (paradaAnterior != null) {
+                        grafo.añadirArista(paradaAnterior, nombreParada);
+                    }
+                    paradaAnterior = nombreParada;
+                    nombreParada = "";
+                    i++;
+                    
+                        
+                       /* grafo.añadirParada(nombreParada);
                     if(grafo.getContParadas() > 1) {
                         String nombreParadaPrevia = grafo.getStop(grafo.getContParadas() - 2);
                         grafo.añadirArista(nombreParadaPrevia, nombreParada);
                     }
                     nombreParada = "";
+                    i++; **/
+                } else if (ch == '{') {
                     i++;
+                    String origen = "", destino = "";
+                    while (json.charAt(i) != '"') {
+                        origen += json.charAt(i);
+                        i++;
+                    }
+                    //Revisar si si funciona y si no poner i += 3
+                    i += 1;
+                    while (json.charAt(i) != '"') {
+                        destino += json.charAt(i);
+                        i++;
+                    }
+                    i ++;
+                    if (!grafo.contieneParada(origen)) {
+                        grafo.añadirParada(origen);
+                    }
+                    if (!grafo.contieneParada(destino)) {
+                        grafo.añadirParada(destino);
+                        
+                    }
+                    grafo.añadirArista(origen, destino);
+                    paradaAnterior = destino;
                 }
+                
                 if (ch == ']') {
                     enParadas = false;
                     break;
@@ -89,6 +124,17 @@ public class CargarGrafoTransporte {
         
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
         /**JSONParser parser = new JSONParser();
         FileReader reader = new FileReader(filePath);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
