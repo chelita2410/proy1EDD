@@ -9,30 +9,41 @@ package proy1edd;
  * @author chela
  */
 
-/**</code> MiLista </code> es la clase creada para la lista de adyacencia
- * que se ocupará de leer el grafo, las listas de adyacencia son más adecuadas
- * para trabajar con este tipo de datos
+/**{@code MiLista} es la clase creada para la lista de adyacencia
+ * que se ocupar&aacute; de leer el grafo, las listas de adyacencia son m&aacute;s adecuadas
+ * para trabajar con este tipo de datos.
  */
 public class MiLista {
     private String[] data;
     private int size;
     private int capacity;
     
+    /**
+     * Constructor que inicializa la lista con una capacidad inicial.
+     */
     public MiLista() {
-        capacity = 10;
+        capacity = 10; //capacidad inicial de la lista
         data = new String[capacity];
-        size = 0;
+        size = 0; //inicializa el tamaño a cero
     }
     
-    //Añade elementos a la lista
+   /**
+     * Añade un elemento a la lista.
+     * @param value El valor a añadir.
+     */
     public void add(String value) {
         if (size == capacity) {
-            resize();
+            resize(); //redimensiona si es necesario.
         }
-        data[size++] = value;
+        data[size++] = value; //añade el valor y aumenta el tamaño.
     }
     
-    //Obtiene elemento en un índice específico
+    /**
+     * Obtiene el elemento en un &iacute;ndice espec&iacute;fico;.
+     * @param index El &iacute;ndice del elemento a obtener.
+     * @return El elemento en el &iacute;ndice especificado o {@code null} si este es
+     * inv&aacute;lido.
+     */
     public String get(int index) {
         if (index >= 0 && index < size) {
             return data[index];
@@ -40,22 +51,32 @@ public class MiLista {
         return null;
     }
     
-    //Ajusta el tamaño de la lista cuando llega a su capacidad máxima
+    /**
+     * Ajusta el tamaño de la lista cuando llega a su capacidad m&aacute;xima
+     */
     private void resize() {
-        capacity *= 2;
+        capacity *= 2; //duplica la capacidad
         String[] newData = new String[capacity];
         for (int i = 0; i < size; i++) {
             newData[i] = data[i];
         }
-        data = newData;
+        data = newData; //actualiza la referencia del array.
     }
     
-    //Obtiene el tamaño actual de la lista
+    /**
+     * Obtiene el tamaño actual de la lista.
+     * @return El n&uacute;mero de elementos en la lista.
+     */
     public int size() {
         return size;
     }
     
-    //Verifica si la lista contiene un elemento espec&iacute;fico
+   /**
+    * Verifica si la lista contiene un elemento espec&iacute;fico.
+    * @param value El valor a buscar en la lista.
+    * @return {@code true} si el elemento se encuentra en la lista, {@code false}
+    * en caso contrario.
+    */
     public boolean contains(String value) {
         for (int i = 0; i < size; i++) {
             if (data[i].equals(value)) {

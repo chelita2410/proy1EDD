@@ -16,14 +16,7 @@ public class InterfazUnica extends javax.swing.JFrame {
      * Creates new form InterfazUnica
      */
     public InterfazUnica() {
-        /**Toolkit a = Toolkit.getDefaultToolkit();
-        int xSize = (int) a.getScreenSize().getWidth();
-        int ySize = (int) a.getScreenSize().getHeight();
-        this.setSize(xSize, ySize);
-        this.setUndecorated(false);
-        this.setAlwaysOnTop(true);
-        this.setResizable(true);
-        this.setVisible(true);*/
+        
         this.setLocationRelativeTo(null);
         setSize(600,400);
         initComponents();

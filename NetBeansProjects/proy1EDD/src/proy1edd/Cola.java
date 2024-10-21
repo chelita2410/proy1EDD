@@ -6,15 +6,20 @@ package proy1edd;
 
 /**
  *
- * @author chela
+ * Clase que representa una cola (FIFO) que almacena elementos de tipo {@code String}.
  */
 public class Cola {
     private String[] data;
-    private int front; //índice primer elemento
-    private int rear; //índice último elemento
-    private int capacity; //capacidad máxima de la cola
-    private int size; //número de elementos actuales en la cola
+    private int front; //&iacute;ndice primer elemento
+    private int rear; //&iacute;ndice &uacute;ltimo elemento
+    private int capacity; //capacidad m&aacute;xima de la cola
+    private int size; //n&uacute;mero de elementos actuales en la cola
     
+    
+    /**
+     * Constructor que inicializa la cola.
+     * @param capacity Capacidad m&aacute;xima de la cola.
+     */
     public Cola(int capacity) {
         this.capacity = capacity;
         data = new String[capacity];
@@ -23,6 +28,10 @@ public class Cola {
         size = 0;
     }
     
+    /**
+     * Añade un elemento al final de la cola.
+     * @param elemento El elemento a añadir.
+     */
     public void añadirAlFinal(String elemento) {
         if (size == capacity) {
             resize();
@@ -32,7 +41,10 @@ public class Cola {
         size++;
     }
     
-    
+    /**
+     * Remueve y retorna el primer elemento de la cola.
+     * @return El primer elemento de la cola, o {@code null} si la cola est&aacute; vac&iacute;a.
+     */
     public String removerPrimero() {
         if(isEmpty()) {
             return null;
@@ -43,6 +55,9 @@ public class Cola {
         return elemento;
     }
     
+    /** 
+     * Redimensiona la cola para duplicar su capacidad.
+     */
     public void resize() {
         int newCapacity = 2 * capacity;
         String[] newData = new String[newCapacity];
@@ -55,6 +70,10 @@ public class Cola {
         capacity = newCapacity;
     }
     
+    /** Verifica si la cola est&aacute; vac&iacute;a.
+     * @return {@code true} si la cola est&aacute; vac&iacute;a, {@code false} en 
+     * caso contrario.
+     */
     public boolean isEmpty() {
         return size == 0;
     }

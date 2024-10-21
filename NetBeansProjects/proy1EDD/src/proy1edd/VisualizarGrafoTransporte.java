@@ -9,24 +9,31 @@ import org.graphstream.graph.implementations.SingleGraph;
 
 /**
  *
- * @author chela
+ * Clase responsable de visualizar el grafo de la red de transporte utilizando GraphStream.
+ * Se toma un objeto de tipo {@code GrafoTransporte} y se convierte en una representaci&oacute;n
+ * visual.
  */
 
-/* SEGURO TENFO QUE DECLARAR THIS.VISUALIZAR AQUI // VERIFICAR ESO */
+
 public class VisualizarGrafoTransporte {
-    public Graph graphStream;
+    public Graph graphStream; //Objeto GraphStream que representa el grafo visualmente.
     
     
+    /**
+     * Constructor que inicializa una visualizaci&oacute;n del grafo de la red de transporte.
+     * @param grafoTransporte El objeto {@code GrafoTransporte} que se desea visualizar.
+     */
     public VisualizarGrafoTransporte(GrafoTransporte grafoTransporte) {
-        graphStream = new SingleGraph("Red de Transporte");
+        graphStream = new SingleGraph("Red de Transporte"); //Crea un nuevo grafo.
         
+        //Establece el estilo de los nodos en la visualizaci&oacute;n.
         graphStream.setAttribute("ui.stylesheet", "node { fill-color: grey; size: 25px; }");
         
-        //Agrega vértices y aristas a GraphStream
+        //Agrega v&eacute;rtices y aristas a GraphStream
         for (int i = 0; i < grafoTransporte.getContParadas(); i++) {
             String parada = grafoTransporte.getStop(i);
             System.out.println("adding node to graphstream " + parada);
-            graphStream.addNode(parada); //Añade cada parada como un vértice
+            graphStream.addNode(parada); //Añade cada parada como un v&eacute;rtice
             for (int j = 0; j < grafoTransporte.getAdyList(i).size(); j++) {
                 String vecino = grafoTransporte.getAdyList(i).get(j);
                 if (graphStream.getEdge(parada + "-" + vecino) == null) {
@@ -34,44 +41,10 @@ public class VisualizarGrafoTransporte {
                 }
             }
         }
-        //Enseñar el grafo visualmente
+        //Muestra el grafo visualmente
         graphStream.display(true);
     }
     
    
-    
-    /*
-    public void highlightCobertura(MiLista paradasCubiertas) {
-        System.out.println("Starting to highlight coverage");
-        for (Node node : graphStream) {
-            System.out.println("GraphStream node ID " + node.getId());
-        }
-        for (int i = 0; i < paradasCubiertas.size(); i++) {
-            //String parada = paradasCubiertas.get(i);
-            String parada = paradasCubiertas.get(i);
-            System.out.println("Covered stop ID " + parada);
-            Node node = graphStream.getNode(parada);
-           // Node node = graphStream.getNode(paradasCubiertas.get(i));
-            if (node != null) {
-                System.out.println("Highlighting node " + parada);
-                node.setAttribute("ui.style", "fill-color: red;");
-               // node.setAttribute("ui.label", parada);
-            } else {
-                System.out.println("Node for stop " + parada + " not found in graph");
-            }
-        }
-*
-        graphStream.display();
-      //  graphStream.nodes().forEach(n -> n.setAttribute("ui.style", n.getAttribute("ui.style")));
-       // graphStream.display(false);
-       // graphStream.display(true);
-    }
-    */
-    /*public void highlightSucursalSugerida(String parada) {
-        Node node = graphStream.getNode(parada);
-        if (node != null) {
-            node.setAttribute("ui.style", "fill-color: blue;");
-        }
-    } */
-    
+  
 }

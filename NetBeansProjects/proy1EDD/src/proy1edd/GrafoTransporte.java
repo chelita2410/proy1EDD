@@ -6,18 +6,21 @@ package proy1edd;
  */
 
 /**
- *
- * @author chela
+ * CLase que representa el grafo de la red de transporte, donde las paradas son  
+ * nodos y las aristas representan las conexiones entre ellas.
+ * 
  */
 public class GrafoTransporte {
-    private String[] paradas;
+    private String[] paradas; //Array que contiene las paradas
     private MiLista[] adyList; //Lista de adyacencias
-    private int contParadas;
-    private int capacity;
-    private boolean[] sucursales; //Array para marcar qué paradas tienen sucursales
-    private MiLista paradasCubiertas;
+    private int contParadas; //Contador de paradas
+    private int capacity; //Capacidad m&aacute;xima del grafo
+    private boolean[] sucursales; //Array para marcar qu&eacute; paradas tienen sucursales
+    private MiLista paradasCubiertas; //Lista de paradas cubiertas por sucursales
     
-    //Constructor
+    /**
+     * Constructor que inicializa el grafo con una capacidad inicial.
+     */
     public GrafoTransporte() {
         capacity = 100; //capacidad inicial de paradas
         paradas = new String[capacity];
@@ -27,22 +30,29 @@ public class GrafoTransporte {
         paradasCubiertas = new MiLista();
     }
     
-    //Añadir una parada al grafo
+    /**
+     * Añade una nueva parada al grafo.
+     * @param parada El nombre de la parada a añadir.
+     */
     public void añadirParada(String parada) {
         if (contieneParada(parada)) {
-            return;
+            return; //No añade si ya existe.
         }
         if (contParadas == capacity) {
-            resizeGraph();
+            resizeGraph(); //Redimensiona si es necesario.
         }
         paradas[contParadas] = parada;
         adyList[contParadas] = new MiLista();
-        sucursales[contParadas] = false; //Porque todavía no se ha puesto ninguna sucursal
+        sucursales[contParadas] = false; //Porque todav&iacute;a no se ha puesto ninguna sucursal
         contParadas++;
-        System.out.println("Parada añadida: " + parada + " (Total paradas: " + contParadas + ")");
+        
     }
     
-    //Encontrar el índice de una parada específica
+    /**
+     * Encuentra el &iacute;ndice de una parada espec&iacute;fica.
+     * @param parada El nombre de la parada a buscar.
+     * @return El &iacute;ndice de la parada o -1 si no se encuentra.
+     */
     public int encontrarIndiceParada(String parada) {
         for (int i = 0; i < contParadas; i++) {
             if (paradas[i].equals(parada)) {
@@ -52,20 +62,33 @@ public class GrafoTransporte {
         return -1; //parada no encontrada
     }
     
-    //Retorna la lista de adyacencias de una parada en un índice específico
+    /**
+     * Retorna la lista de adyacencias de una parada en un &iacute;ndice espec&iacute;fico.
+     * @param indice El &iacute;ndice de la parada.
+     * @return La lista de adyacencias de la parada o {@code null} si el &iacute;ndice es inv&aacute;lido.
+     */
     public MiLista getAdyList(int indice) {
         if (indice >= 0 && indice < contParadas) {
-            return adyList[indice]; //Retorna la lista de adyacencias para la parada en un índice específico
+            return adyList[indice]; //Retorna la lista de adyacencias para la parada.
         } else {
-            return null;
+            return null; //&iacute;ndice inv&aacute;lido.
         }
     }
     
-    //Retorna el número actual de paradas en el grafo
+    /**
+     * Retorna el n&uacute;mero actual de paradas en el grafo.
+     * @return El contador de paradas.
+     */
     public int getContParadas() {
         return contParadas;
     }
     
+    
+    /**
+     * Retorna el nombre de la parada en un &iacute;ndice espec&iacute;fico.
+     * @param indice El &iacute;ndice de la parada.
+     * @return El nombre de la parada o {@code null} si el &iacute;ndice es inv&aacute;lido.
+     */
     public String getStop(int indice) {
         if (indice >= 0 && indice < contParadas) {
             return paradas[indice]; 
@@ -74,38 +97,55 @@ public class GrafoTransporte {
         }
     }
     
-    //Añade arista entre dos paradas
+    /**
+     * Añade una arista entre dos paradas.
+     * @param parada1 El nombre de la primera parada.
+     * @param parada2 EL nombre de la segunda parada.
+     */
     public void añadirArista(String parada1, String parada2) {
         int indice1 = encontrarIndiceParada(parada1);
         int indice2 = encontrarIndiceParada(parada2);
         
         if (indice1 == -1) {
-            System.out.println("Stop " + parada1 + "not found, adding it.");
+            
             añadirParada(parada1);
-            indice1 = contParadas -1;
+            indice1 = contParadas -1; //Actualiza el &iacute;ndice despu&eacute;s de añadir
         }
         if (indice2 == -1) {
-            System.out.println("Stop " + parada2 + "not found, adding it");
+            
             añadirParada(parada2);
-            indice2 = contParadas -1;
+            indice2 = contParadas -1; //Actualiza el &iacute;ndice despu&eacute;s de añadir
         }
         
-        adyList[indice1].add(parada2);
+        adyList[indice1].add(parada2); //Añade la arista en ambas direcciones.
         adyList[indice2].add(parada1);
-        System.out.println("Arista añadida exitosamente entre: " + parada1 + " y " + parada2);
+        
     }
     
+    /**
+     * Verifica si existe una parada en el grafo.
+     * @param parada El nombre de la parada a verificar.
+     * @return {@code true} si existe, {@code false} en caso contrario.
+     */
     public boolean existeParada(String parada) {
         return encontrarIndiceParada(parada) != -1;
     }
     
+    /**
+     * Verifica si el grafo contiene una parada espec&iacute;fica.
+     * @param parada El nombre de la parada a verificar.
+     * @return {@code true} si existe, {@code false} en caso contrario.
+     */
     public boolean contieneParada(String parada) {
         return encontrarIndiceParada(parada) != -1;
     }
     
 
     
-    //Marcar una parada como una sucursal
+    /**
+     * Marca una parada como una sucursal.
+     * @param parada El nombre de la parada a marcar.
+     */
     public void ponerSucursal(String parada) {
         int indice = encontrarIndiceParada(parada);
         if (indice != -1) {
@@ -113,14 +153,20 @@ public class GrafoTransporte {
         }
     }
     
-    //Revisar si una parada es una sucursal
+    /**
+     * Verifica si una parada es una sucursal.
+     * @param parada El nombre de la parada a verificar.
+     * @return {@code true} si es una sucursal, {@code false} en caso contrario.
+     */
     public boolean esSucursal(String parada) {
         int indice = encontrarIndiceParada(parada);
         return indice != -1 && sucursales[indice];
     }
 
     
-    //Cambia el tamaño del grafo cuando este llega a su capacidad máxima
+    /**
+     * Cambia el tamaño del grafo cuando alcanza su capacidad m&aacute;xima.
+     */
     private void resizeGraph() {
         capacity *= 2;
         String[] nuevaParada = new String[capacity];
@@ -132,35 +178,17 @@ public class GrafoTransporte {
             nuevaAdyList[i] = adyList[i];
             nuevaSucursal[i] = sucursales[i];
         }
-        paradas = nuevaParada;
+        paradas = nuevaParada; //Actualiza las referencias.
         adyList = nuevaAdyList;
         sucursales = nuevaSucursal;
-        System.out.println("Grafo resized a nueva capacidad: " + capacity);
-    }
-    
- /*   public MiLista getParadasNoCubiertas(MiLista paradasCubiertas) {
-        MiLista paradasNoCubiertas = new MiLista();
-        for (int i = 0; i < contParadas; i++) {
-            String parada = paradas[i];
-          //  boolean esCubierto = false;
-            if (!paradasCubiertas.contains(parada)) {
-                paradasNoCubiertas.add(parada);
-            }
-            
-          //  for (int j = 0; j < paradasCubiertas.size(); j++) {
-         //       if(paradasCubiertas.get(j).equals(parada)) {
-          //          esCubierto = true;
-           //         break;
-          //      }
-         //   }
-      //  if (!esCubierto) {
-         //   paradasNoCubiertas.add(parada);
-        //    }    
         
-       }
-       return paradasNoCubiertas; 
     }
-    */
+
+    /**
+     * Sugiere una nueva sucursal basada en la cobertura de paradas.
+     * @param t El tiempo para calcular la cobertura.
+     * @return El nombre de la mejor parada candidata o {@code null} si no hay ninguna.
+     */
     public String sugerirNuevaSucursal(int t) {
         MiLista paradasNoCubiertas = getParadasNoCubiertas();
         String mejorParada = null;
@@ -178,19 +206,23 @@ public class GrafoTransporte {
             for (int i = 0; i < coberturaNuevaSucursal.size(); i++) {
                 String parada = coberturaNuevaSucursal.get(i);
                 if (!paradasCubiertas.contains(parada)) {
-                    paradasCubiertas.add(parada);
+                    paradasCubiertas.add(parada); //Añade la parada a las cubiertas.
                 }
             }
-            ponerSucursal(mejorParada);
+            ponerSucursal(mejorParada); //Marca como sucursal
         }
-        return mejorParada;
+        return mejorParada; //Retorna la mejor parada encontrada.
     }
 
+    /**
+     * Retorna una lista de paradas que no est&aacute;n cubiertas por sucursales.
+     * @return Una lista de paradas no cubiertas.
+     */
     public MiLista getParadasNoCubiertas() {
        MiLista paradasNoCubiertas = new MiLista();
         for (int i = 0; i < contParadas; i++) {
             String parada = paradas[i];
-          //  boolean esCubierto = false;
+        
             if (!paradasCubiertas.contains(parada)) {
                 paradasNoCubiertas.add(parada);
             }
