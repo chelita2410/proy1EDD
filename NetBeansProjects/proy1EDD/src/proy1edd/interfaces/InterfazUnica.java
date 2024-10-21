@@ -38,6 +38,8 @@ public class InterfazUnica extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
+        jDialog2 = new javax.swing.JDialog();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -51,10 +53,12 @@ public class InterfazUnica extends javax.swing.JFrame {
         exitBoton = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
-        setBackground(new java.awt.Color(255, 102, 255));
+        setBackground(new java.awt.Color(255, 0, 204));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -62,7 +66,7 @@ public class InterfazUnica extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Savoye LET", 0, 24)); // NOI18N
         jLabel1.setText("Ubicación de Sucursales");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Hiragino Mincho ProN", 0, 13)); // NOI18N
         jLabel2.setText("En este sistema podrás, a partir del archivo cargado por ti, establecer una ");
@@ -77,7 +81,7 @@ public class InterfazUnica extends javax.swing.JFrame {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Hiragino Mincho ProN", 0, 13)); // NOI18N
-        jLabel5.setText("a partir de ahí podrás seleccionar en qué paradas del transporte público ");
+        jLabel5.setText("a partir de ahí podrás seleccionar en qué paradas del transporte público poner ");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Hiragino Mincho ProN", 0, 13)); // NOI18N
@@ -92,7 +96,7 @@ public class InterfazUnica extends javax.swing.JFrame {
         jLabel8.setText("Deseas continuar?");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
 
-        contBoton.setBackground(new java.awt.Color(204, 204, 255));
+        contBoton.setBackground(new java.awt.Color(153, 153, 255));
         contBoton.setFont(new java.awt.Font("Kohinoor Devanagari", 0, 13)); // NOI18N
         contBoton.setText("Continuar");
         contBoton.addActionListener(new java.awt.event.ActionListener() {
@@ -102,7 +106,7 @@ public class InterfazUnica extends javax.swing.JFrame {
         });
         getContentPane().add(contBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 310, -1, -1));
 
-        exitBoton.setBackground(new java.awt.Color(204, 204, 255));
+        exitBoton.setBackground(new java.awt.Color(153, 153, 255));
         exitBoton.setFont(new java.awt.Font("Kohinoor Devanagari", 0, 13)); // NOI18N
         exitBoton.setText("Salir");
         exitBoton.addActionListener(new java.awt.event.ActionListener() {
@@ -112,11 +116,14 @@ public class InterfazUnica extends javax.swing.JFrame {
         });
         getContentPane().add(exitBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, -1, -1));
 
-        jLabel9.setText("Recuerda que si necesitas agregar una linea a tu red de transporte sera necesario que separes");
+        jLabel9.setFont(new java.awt.Font("Hiragino Mincho ProN", 0, 13)); // NOI18N
+        jLabel9.setText("Recuerda que si necesitas agregar una linea a tu red de transporte será necesario");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
 
-        jLabel10.setText("cada estacion de esta con una coma!!!");
+        jLabel10.setFont(new java.awt.Font("Hiragino Mincho ProN", 0, 13)); // NOI18N
+        jLabel10.setText("que separes cada estacion de esta con una coma!!!");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 260, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -169,6 +176,8 @@ public class InterfazUnica extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton contBoton;
     private javax.swing.JButton exitBoton;
+    private javax.swing.JDialog jDialog1;
+    private javax.swing.JDialog jDialog2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -180,5 +189,6 @@ public class InterfazUnica extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

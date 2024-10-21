@@ -37,6 +37,80 @@ public class CargarGrafoTransporte {
     
     private static void parseJSON(String json, GrafoTransporte grafo) {
         int i = 0;
+        String nombreParada = null;
+        String paradaAnterior = null;
+        while (i < json.length()) {
+            char ch = json.charAt(i);
+            if (ch == '"' && nombreParada == null) {
+                i++;
+                String nombreLinea = "";
+                while (json.charAt(i) != '"') {
+                    nombreLinea += json.charAt(i);
+                    i++;
+                }
+                i++;
+                continue;
+            }
+            if (ch == '[') {
+                i++;
+                while (i < json.length() && json.charAt(i) != ']') {
+                    ch = json.charAt(i);
+                    
+                    if (ch == '"') {
+                        i++;
+                        nombreParada = "";
+                        while (json.charAt(i) != '"') {
+                            nombreParada += json.charAt(i);
+                            i++;
+                        }
+                        i++;
+                        
+                        if (!grafo.contieneParada(nombreParada)) {
+                            grafo.añadirParada(nombreParada);
+                        }
+                        if (paradaAnterior != null) {
+                            grafo.añadirArista(paradaAnterior, nombreParada);
+                        }
+                        paradaAnterior = nombreParada;
+                    } else if (ch == '{') {
+                        i++;
+                        String origen = "", destino = "";
+                        
+                        while (json.charAt(i) != '"') {
+                            origen += json.charAt(i);
+                            i++;
+                        }
+                        i++;
+                        
+                        while (json.charAt(i) != '"') {
+                            destino += json.charAt(i);
+                            i++;
+                        }
+                        i++;
+                        
+                        if(!grafo.contieneParada(origen)) {
+                            grafo.añadirParada(origen);
+                        }
+                        if (!grafo.contieneParada(destino)) {
+                            grafo.añadirParada(destino);
+                        }
+                        grafo.añadirArista(origen, destino);
+                        paradaAnterior = destino;
+                    }
+                    i++;
+                    
+                }
+                i++;
+                paradaAnterior = null;
+            }
+            i++;
+        }
+    }
+   
+        
+        
+        
+        /*   int i = 0;
         String nombreLinea = null;
         String nombreParada = null;
         boolean enLinea = false;
@@ -91,7 +165,7 @@ public class CargarGrafoTransporte {
                     }
                     nombreParada = "";
                     i++; **/
-                } else if (ch == '{') {
+           /*     } else if (ch == '{') {
                     i++;
                     String origen = "", destino = "";
                     while (json.charAt(i) != '"') {
@@ -126,6 +200,13 @@ public class CargarGrafoTransporte {
         
         }
     }
+    
+    
+    
+    
+    
+    
+    
     
     
     

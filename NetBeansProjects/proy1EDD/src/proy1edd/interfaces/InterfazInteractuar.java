@@ -18,6 +18,8 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.swing_viewer.ViewPanel;
+import java.awt.event.*;
+
 
 
 
@@ -182,7 +184,8 @@ public class InterfazInteractuar extends javax.swing.JFrame {
             }
         }
         actualizarSeleccionarParada();
-        visualizar = new VisualizarGrafoTransporte(grafo);
+        enseñarGrafo();
+       /// visualizar = new VisualizarGrafoTransporte(grafo);
         JOptionPane.showMessageDialog(this, "Linea agregada: " + lineaParadas);
     }
     
@@ -260,6 +263,8 @@ public class InterfazInteractuar extends javax.swing.JFrame {
         ViewPanel viewPanel = (ViewPanel) viewer.getDefaultView();
        // Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_SWING);
         viewer.enableAutoLayout();
+      
+       
       /*  viewPanel.addMouseWheelListener(e -> {
             double zoomFactor = Math.pow(1.05, e.getPreciseWheelRotation());
             viewPanel.getCamera().setViewPercent(viewPanel.getCamera().getViewPercent() * zoomFactor); 
@@ -388,7 +393,7 @@ public class InterfazInteractuar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor selecciona una parada para buscar");
         }
     }
-    
+    /*
     private void enseñarCobertura(MiLista paradasCubiertas) {
         //ensenarGrafo.append("\nParadas cubiertas de la sucursal:\n");
         for (int i = 0; i < paradasCubiertas.size(); i++) {
