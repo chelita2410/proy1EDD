@@ -17,9 +17,7 @@ import java.io.IOException;
 /**
  *
  *Carga un grafo de transporte desde un archivo JSON espec&iacute;fico.
- * @param grafo El objeto {@link GrafoTransporte} donde se cargar&aacute;n los datos.
- * @param filePath La ruta del archivo JSON a leer.
- * @throws IOException Si ocurre un error al leer el archivo.
+ * 
  */
 public class CargarGrafoTransporte {
     public static void cargarDesdeJSON(GrafoTransporte grafo, String filePath) throws IOException {

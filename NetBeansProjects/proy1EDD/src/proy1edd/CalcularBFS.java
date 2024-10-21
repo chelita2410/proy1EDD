@@ -10,7 +10,7 @@ package proy1edd;
  */
 public class CalcularBFS {
    /**
-    *Calcula las paradas alcanzables dentro de una distancia m&aacure;xima desde
+    *Calcula las paradas alcanzables dentro de una distancia m&aacute;xima desde
     * una parada inicial en el grafo del transporte.
     * @param grafo el grafo que contiene las paradas y sus conexiones.
     * @param paradaSucursal el nombre de la parada inicial desde donde comienza el BFS.
@@ -40,7 +40,7 @@ public class CalcularBFS {
             //Añade la parada a la lista cubierta si está dentro de la distancia t
             if (distancia[indiceActual] <= t) {
                 paradasCubiertas.add(paradaActual);
-                System.out.println("adding covered stop to list " + paradaActual);
+                
             }
             //Ver paradas adyacentes
             for (int i = 0; i < grafo.getAdyList(indiceActual).size(); i++) {
