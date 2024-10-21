@@ -1,4 +1,3 @@
-# proyecto1EDD
 # Cobertura de Sucursales - Proyecto 1
 
 ## Descripción
